@@ -14,9 +14,6 @@ function ConfirmationPage() {
     const fetchOrder = async () => {
       try {
         const response = await fetch(`${url}/api/orders/${id}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch order");
-        }
         const data = await response.json();
         setOrder(data);
         setLoading(false);
