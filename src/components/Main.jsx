@@ -3,6 +3,7 @@ import Menu from "./Menu";
 import Order from "./Order";
 import OrderModal from "./OrderModal";
 import styles from "./styles/Order.module.css";
+import url from "../domain";
 
 function Main() {
   const [menuItems, setMenuItems] = useState([]);
@@ -10,7 +11,7 @@ function Main() {
   const [orderModal, setOrderModal] = useState(false);
 
   const getItems = async () => {
-    const response = await fetch("/api/menu");
+    const response = await fetch(`${url}/api/menu`);
     const data = await response.json();
     setMenuItems(data);
   };

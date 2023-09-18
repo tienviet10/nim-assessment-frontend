@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import styles from "./styles/OrderModal.module.css";
+import url from "../domain";
 
 function OrderModal({ order, setOrderModal }) {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
   const placeOrder = async () => {
-    const response = await fetch("/api/orders", {
+    const response = await fetch(`${url}/api/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -19,8 +22,11 @@ function OrderModal({ order, setOrderModal }) {
         items: order
       })
     });
-    const data = await response.json();
-    console.log(data);
+
+    if (response.ok) {
+      const data = await response.json();
+      navigate(`/order-confirmation/${data.id}`);
+    }
   };
   return (
     <>
