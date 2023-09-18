@@ -8,8 +8,47 @@ function OrderModal({ order, setOrderModal }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [nameError, setNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [addressError, setAddressError] = useState("");
+
+  const formatPhoneNumber = (inputPhoneNumber) => {
+    const cleanedPhoneNumber = inputPhoneNumber.replace(/\D/g, "");
+
+    const formattedPhoneNumber = `(${cleanedPhoneNumber.slice(
+      0,
+      3
+    )}) ${cleanedPhoneNumber.slice(3, 6)}-${cleanedPhoneNumber.slice(6, 10)}`;
+
+    return formattedPhoneNumber;
+  };
 
   const placeOrder = async () => {
+    setNameError("");
+    setPhoneError("");
+    setAddressError("");
+    let isValid = true;
+
+    if (!name) {
+      setNameError("Name is required.");
+      isValid = false;
+    }
+
+    const phonePattern = /^\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
+    if (!phone || !phonePattern.test(phone)) {
+      setPhoneError("Invalid phone number format. Use (XXX) XXX-XXXX.");
+      isValid = false;
+    }
+
+    if (!address) {
+      setAddressError("Address is required.");
+      isValid = false;
+    }
+
+    if (!isValid) {
+      return;
+    }
+
     const response = await fetch(`${url}/api/orders`, {
       method: "POST",
       headers: {
@@ -17,7 +56,7 @@ function OrderModal({ order, setOrderModal }) {
       },
       body: JSON.stringify({
         name,
-        phone,
+        phone: formatPhoneNumber(phone),
         address,
         items: order
       })
@@ -84,8 +123,10 @@ function OrderModal({ order, setOrderModal }) {
               />
             </label>
           </div>
+          {nameError && <p className={styles.error}>{nameError}</p>}
+          {phoneError && <p className={styles.error}>{phoneError}</p>}
+          {addressError && <p className={styles.error}>{addressError}</p>}
         </form>
-
         <div className={styles.orderModalButtons}>
           <button
             className={styles.orderModalClose}

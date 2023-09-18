@@ -37,6 +37,7 @@
   display: flex;
   justify-content: space-evenly;
   width: 100%;
+  margin-top: 40px;
 }
 .formGroup {
   width: 100%;
@@ -62,4 +63,10 @@
 .deliveryChoice .active {
   background-color: var(--secondary-accent);
   color: var(--secondary-color);
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  align-self: flex-start;
 }
